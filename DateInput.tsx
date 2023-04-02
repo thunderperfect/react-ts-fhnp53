@@ -2,13 +2,13 @@ import * as React from 'react';
 import { AiTwotoneCalendar } from 'react-icons/ai';
 import { Input, Row, Col, Popover, Button, Calendar } from 'antd';
 import Foco from 'react-foco';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
   const [calendarOpen, setCalendarOpen] = React.useState(false);
 
   const onCalendarChange = (date: Dayjs) => {
-    props.onDateChange(date)
+    props.onDateChange(date);
     setCalendarOpen(false);
   };
 
@@ -16,8 +16,8 @@ const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
     <Popover
       open={calendarOpen}
       content={
-        <Foco onClickOutside={(s:any) => setCalendarOpen(false)}>
-          <Calendar fullscreen={false}  onChange={onCalendarChange} />
+        <Foco onClickOutside={(s: any) => setCalendarOpen(false)}>
+          <Calendar fullscreen={false} onChange={onCalendarChange} />
         </Foco>
       }
       title="Title"
@@ -32,7 +32,11 @@ const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
 };
 
 const DateInput = (props: any) => {
-  const [dateVal, setDateVal] = React.useState(dayjs());
+  const [dateVal, setDateVal] = React.useState<string>(dayjs().format('MM/DD/YYYY'));
+
+  const onDateChange = (date: Dayjs) => {
+    setDateVal(date);
+  };
 
   return (
     <div>
@@ -40,9 +44,9 @@ const DateInput = (props: any) => {
         <Col span={12}>
           Date:
           <Input
-            addonAfter={
-              <CalendarPopover onDateChange={(date: Dayjs) => console.log(date.format('MM/DD/YYYY'))} />
-            }
+            size="small"
+            onChange={(e:any) => console.log(e.target.value)}
+            addonAfter={<CalendarPopover onDateChange={onDateChange} />}
             value={dateVal}
           />
         </Col>
