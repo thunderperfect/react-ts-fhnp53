@@ -32,7 +32,9 @@ const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
 };
 
 const DateInput = (props: any) => {
-  const [dateVal, setDateVal] = React.useState<string>(dayjs().format('MM/DD/YYYY'));
+  const [dateVal, setDateVal] = React.useState<string>(
+    dayjs().format('MM/DD/YYYY')
+  );
 
   const onDateChange = (date: Dayjs) => {
     setDateVal(date);
@@ -45,7 +47,7 @@ const DateInput = (props: any) => {
           Date:
           <Input
             size="small"
-            onChange={(e:any) => console.log(e.target.value)}
+            onChange={(e: any) => setDateVal(e.target.value)}
             addonAfter={<CalendarPopover onDateChange={onDateChange} />}
             value={dateVal}
           />
