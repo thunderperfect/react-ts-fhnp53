@@ -4,7 +4,10 @@ import { Input, Row, Col, Popover, Button, Calendar } from 'antd';
 import Foco from 'react-foco';
 import dayjs, { Dayjs } from 'dayjs';
 
-const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
+const CalendarPopover = (props: {
+  selectedCalendarDate: Dayjs;
+  onDateChange: (date: any) => void;
+}) => {
   const [calendarOpen, setCalendarOpen] = React.useState(false);
 
   const onCalendarChange = (date: Dayjs) => {
@@ -14,17 +17,24 @@ const CalendarPopover = (props: { onDateChange: (date: any) => void }) => {
 
   return (
     <Popover
+      title={null}
       open={calendarOpen}
       content={
         <Foco onClickOutside={(s: any) => setCalendarOpen(false)}>
-          <Calendar fullscreen={false} onChange={onCalendarChange} />
+          <Calendar
+            fullscreen={false}
+            onChange={onCalendarChange}
+            value={props.selectedCalendarDate}
+          />
         </Foco>
       }
-      title="Title"
       overlayStyle={{ width: 325 }}
       trigger="click"
     >
-      <AiTwotoneCalendar onClick={() => setCalendarOpen(true)}>
+      <AiTwotoneCalendar
+        onClick={() => setCalendarOpen(true)}
+        style={{ fontSize: 'larger', cursor: 'pointer' }}
+      >
         Click me
       </AiTwotoneCalendar>
     </Popover>
@@ -37,23 +47,29 @@ const DateInput = (props: any) => {
   );
 
   const onDateChange = (date: Dayjs) => {
-    setDateVal(date);
+    setDateVal(date.format('MM/DD/YYYY'));
   };
 
+  const CalendarPopoverMemo = React.memo(CalendarPopover);
+  const InputPopoverMemo = React.memo(Input);
+
   return (
-    <div>
-      <Row>
-        <Col span={12}>
-          Date:
-          <Input
-            size="small"
-            onChange={(e: any) => setDateVal(e.target.value)}
-            addonAfter={<CalendarPopover onDateChange={onDateChange} />}
-            value={dateVal}
-          />
-        </Col>
-      </Row>
-    </div>
+    <Row>
+      <Col span={12}>
+        Date:
+        <Input
+          size="small"
+          onChange={(e: any) => setDateVal(e.target.value)}
+          addonAfter={
+            <CalendarPopover
+              onDateChange={onDateChange}
+              selectedCalendarDate={dayjs(dateVal)}
+            />
+          }
+          value={dateVal}
+        />
+      </Col>
+    </Row>
   );
 };
 export default DateInput;
