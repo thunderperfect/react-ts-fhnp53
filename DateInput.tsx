@@ -4,6 +4,7 @@ import { Input, Row, Col, Popover, Button, Calendar } from 'antd';
 import Foco from 'react-foco';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import InputMask from 'react-input-mask';
 
 const CalendarPopover = (props: {
   selectedCalendarDate: Dayjs;
@@ -60,10 +61,10 @@ const DateInput = (props: any) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setDateVal(newValue);
-
-    setIsValid(
-      dayjs(newValue, globalDateFormat, true).isValid() ? '' : 'error'
-    );
+console.log('onInputChange',newValue)
+     setIsValid(
+       dayjs(newValue, globalDateFormat, true).isValid() ? '' : 'error'
+     );
   };
 
   const CalendarPopoverMemo = React.memo(CalendarPopover);
@@ -73,19 +74,28 @@ const DateInput = (props: any) => {
     <Row>
       <Col span={12}>
         Date:
-        <Input
-          status={isValid}
-          maxLength={10}
-          size="small"
+        <InputMask
           onChange={onInputChange}
-          addonAfter={
-            <CalendarPopover
-              onDateChange={onDateChange}
-              selectedCalendarDate={dayjs(dateVal)}
-            />
-          }
           value={dateVal}
-        />
+          mask="99/99/9999"     
+          alwaysShowMask={true}
+        >
+          {(inputProps) => (
+            <Input
+              status={isValid}
+              
+              size="small"
+              addonAfter={
+                <CalendarPopover
+                  onDateChange={onDateChange}
+                  selectedCalendarDate={dayjs(dateVal)}
+                />
+              }
+              {...inputProps}
+              type="tel"
+            />
+          )}
+        </InputMask>
       </Col>
     </Row>
   );
