@@ -3,6 +3,7 @@ import { AiTwotoneCalendar } from 'react-icons/ai';
 import { Input, Row, Col, Popover, Button, Calendar } from 'antd';
 import Foco from 'react-foco';
 import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const CalendarPopover = (props: {
   selectedCalendarDate: Dayjs;
@@ -32,6 +33,7 @@ const CalendarPopover = (props: {
       trigger="click"
     >
       <AiTwotoneCalendar
+        color="gray"
         onClick={() => setCalendarOpen(true)}
         style={{ fontSize: 'larger', cursor: 'pointer' }}
       >
@@ -42,12 +44,26 @@ const CalendarPopover = (props: {
 };
 
 const DateInput = (props: any) => {
+  const globalDateFormat: string = 'MM/DD/YYYY';
+  type states = 'error' | 'warning' | '';
+
+  const [isValid, setIsValid] = React.useState<states>('');
+
   const [dateVal, setDateVal] = React.useState<string>(
-    dayjs().format('MM/DD/YYYY')
+    dayjs().format(globalDateFormat)
   );
 
   const onDateChange = (date: Dayjs) => {
-    setDateVal(date.format('MM/DD/YYYY'));
+    setDateVal(date.format(globalDateFormat));
+  };
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setDateVal(newValue);
+
+    setIsValid(
+      dayjs(newValue, globalDateFormat, true).isValid() ? '' : 'error'
+    );
   };
 
   const CalendarPopoverMemo = React.memo(CalendarPopover);
@@ -58,8 +74,10 @@ const DateInput = (props: any) => {
       <Col span={12}>
         Date:
         <Input
+          status={isValid}
+          maxLength={10}
           size="small"
-          onChange={(e: any) => setDateVal(e.target.value)}
+          onChange={onInputChange}
           addonAfter={
             <CalendarPopover
               onDateChange={onDateChange}
