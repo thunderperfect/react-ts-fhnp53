@@ -61,10 +61,10 @@ const DateInput = (props: any) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setDateVal(newValue);
-console.log('onInputChange',newValue)
-     setIsValid(
-       dayjs(newValue, globalDateFormat, true).isValid() ? '' : 'error'
-     );
+    console.log('onInputChange', newValue);
+    setIsValid(
+      dayjs(newValue, globalDateFormat, true).isValid() ? '' : 'error'
+    );
   };
 
   const CalendarPopoverMemo = React.memo(CalendarPopover);
@@ -77,13 +77,12 @@ console.log('onInputChange',newValue)
         <InputMask
           onChange={onInputChange}
           value={dateVal}
-          mask="99/99/9999"     
+          mask="99/99/9999"
           alwaysShowMask={true}
         >
           {(inputProps) => (
             <Input
               status={isValid}
-              
               size="small"
               addonAfter={
                 <CalendarPopover
